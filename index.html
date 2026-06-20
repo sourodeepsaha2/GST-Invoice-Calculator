@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GST & Invoice Calculator - Premium Fintech Tools</title>
+  <meta name="description" content="Calculate GST and generate custom, professional business invoices instantly in your browser. Download printable PDF invoices for free.">
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- html2pdf Library for high-fidelity client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5IfS51RRPSsp565113diChFV06TifLY18zuxG0BmaCl941Fq89BIy07B83yZe8ecS7TQHpsKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+  <!-- Premium Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">
+        <i class="fa-solid fa-calculator"></i>
+      </div>
+      <span class="logo-text">TaxHero</span>
+    </div>
+    
+    <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+  </header>
+
+  <!-- Main Container -->
+  <main>
+    <h1 class="dashboard-title">GST & Invoice Control Center</h1>
+    <p class="dashboard-subtitle">Calculate taxes, manage line items, and generate beautiful, print-ready invoices instantly.</p>
+    
+    <div class="dashboard-grid">
+      
+      <!-- LEFT COLUMN: GST Calculator Card -->
+      <section class="card" aria-labelledby="gst-calc-title">
+        <div class="card-title-area">
+          <div class="card-title-icon">
+            <i class="fa-solid fa-percent"></i>
+          </div>
+          <h2 class="card-title" id="gst-calc-title">Live GST Calculator</h2>
+        </div>
+        
+        <form class="calculator-form" id="gst-calc-form" onsubmit="event.preventDefault();">
+          
+          <!-- Amount Input -->
+          <div class="form-group">
+            <label class="form-label" for="gst-amount">Initial Amount</label>
+            <div class="input-container">
+              <span class="input-addon">₹</span>
+              <input type="number" id="gst-amount" class="form-input" placeholder="e.g. 10000" min="0" step="any" value="10000" required>
+            </div>
+          </div>
+          
+          <!-- GST Rate Selector -->
+          <div class="form-group">
+            <label class="form-label" for="gst-rate-select">GST Rate</label>
+            <select id="gst-rate-select" class="form-select">
+              <option value="5">5% (Standard Goods)</option>
+              <option value="12">12% (Standard Services)</option>
+              <option value="18" selected>18% (Standard IT/SaaS/Professional)</option>
+              <option value="28">28% (Luxury Goods)</option>
+              <option value="custom">Custom Rate %</option>
+            </select>
+            
+            <!-- Custom Rate input field (shown on custom select) -->
+            <div id="custom-rate-container" class="custom-rate-input-container">
+              <div class="input-container">
+                <input type="number" id="gst-custom-rate" class="form-input no-addon" placeholder="Enter custom GST rate" min="0" max="100" step="any">
+                <span class="input-addon-right">%</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Calculation Mode Switcher: Add vs Remove GST -->
+          <div class="form-group">
+            <label class="form-label">Calculation Mode</label>
+            <div class="toggle-selector" id="gst-mode-selector">
+              <div class="toggle-option active" data-mode="add">Add GST (Exclusive)</div>
+              <div class="toggle-option" data-mode="remove">Remove GST (Inclusive)</div>
+            </div>
+          </div>
+          
+          <!-- Action Buttons for Form Clarity -->
+          <div class="btn-action-container">
+            <button type="button" id="btn-gst-calculate" class="btn btn-primary">
+              <i class="fa-solid fa-arrows-rotate"></i> Recalculate
+            </button>
+            <button type="button" id="btn-gst-reset" class="btn btn-secondary">
+              Reset
+            </button>
+          </div>
+          
+          <!-- Dynamic GST Breakdown Outputs -->
+          <div class="results-container" aria-label="Calculation Breakdown">
+            <div class="result-row">
+              <span>Original Amount (Pre-Tax)</span>
+              <span class="result-val" id="result-original-amt">₹10,000.00</span>
+            </div>
+            <div class="result-row">
+              <span>CGST (Central GST - 50%)</span>
+              <span class="result-val" id="result-cgst">₹900.00</span>
+            </div>
+            <div class="result-row">
+              <span>SGST (State GST - 50%)</span>
+              <span class="result-val" id="result-sgst">₹900.00</span>
+            </div>
+            <div class="result-row">
+              <span>Total GST Tax Amount</span>
+              <span class="result-val" id="result-total-gst">₹1,800.00</span>
+            </div>
+            <div class="result-row grand-total">
+              <span>Final Total Amount</span>
+              <span class="result-val" id="result-final-amt">₹11,800.00</span>
+            </div>
+          </div>
+          
+        </form>
+      </section>
+      
+      <!-- RIGHT COLUMN: Invoice Generator Card -->
+      <section class="card" aria-labelledby="invoice-gen-title">
+        <div class="card-title-area">
+          <div class="card-title-icon">
+            <i class="fa-solid fa-file-invoice"></i>
+          </div>
+          <h2 class="card-title" id="invoice-gen-title">Professional Invoice Builder</h2>
+        </div>
+        
+        <form id="invoice-builder-form" onsubmit="event.preventDefault();">
+          
+          <!-- Billing Meta Grid -->
+          <div class="invoice-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="inv-biz-name">Your Business Name</label>
+              <input type="text" id="inv-biz-name" class="form-input no-addon" placeholder="e.g. Digital Heroes Co." value="Digital Heroes Co." required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inv-biz-gstin">Your GSTIN (Tax ID)</label>
+              <input type="text" id="inv-biz-gstin" class="form-input no-addon" placeholder="e.g. 07AAAAA1111A1Z1" value="07AAAAA1111A1Z1">
+            </div>
+            <div class="form-group invoice-full-width">
+              <label class="form-label" for="inv-biz-addr">Your Business Address</label>
+              <input type="text" id="inv-biz-addr" class="form-input no-addon" placeholder="e.g. 123 Innovators Way, Tech Park, New Delhi" value="123 Innovators Way, Tech Park, New Delhi">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="inv-client-name">Client Name</label>
+              <input type="text" id="inv-client-name" class="form-input no-addon" placeholder="e.g. Acme Corp" value="Acme Corporation" required>
+            </div>
+            <div class="form-group invoice-full-width">
+              <label class="form-label" for="inv-client-addr">Client Address</label>
+              <input type="text" id="inv-client-addr" class="form-input no-addon" placeholder="e.g. 456 Corporate Avenue, Mumbai" value="456 Corporate Avenue, Mumbai">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="inv-number">Invoice Number</label>
+              <input type="text" id="inv-number" class="form-input no-addon" placeholder="e.g. INV-2026-001" value="INV-2026-001" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inv-date">Invoice Date</label>
+              <input type="date" id="inv-date" class="form-input no-addon" required>
+            </div>
+          </div>
+          
+          <!-- Line Items Table -->
+          <div class="form-group">
+            <label class="form-label">Line Items</label>
+            <div class="table-responsive">
+              <table class="line-items-table" id="line-items-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40%;">Description</th>
+                    <th style="width: 12%;">Qty</th>
+                    <th style="width: 18%;">Rate (₹)</th>
+                    <th style="width: 12%;">GST (%)</th>
+                    <th style="width: 18%; text-align: right;">Amount (₹)</th>
+                    <th style="width: 10%;"></th>
+                  </tr>
+                </thead>
+                <tbody id="line-items-tbody">
+                  <!-- JS will dynamically inject and maintain rows here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <!-- Table Footer Action -->
+          <div class="add-item-btn-container">
+            <button type="button" id="btn-add-item" class="btn btn-secondary btn-outline">
+              <i class="fa-solid fa-plus"></i> Add Line Item
+            </button>
+            <span class="form-label" style="margin: 0; color: var(--text-light)">Double-check all rates before exporting</span>
+          </div>
+          
+          <!-- Invoice Calculation Panel -->
+          <div class="invoice-summary-box">
+            <div class="summary-row">
+              <span class="summary-label">Subtotal (Pre-Tax):</span>
+              <span class="summary-value" id="inv-subtotal">₹0.00</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Calculated SGST (half):</span>
+              <span class="summary-value" id="inv-sgst">₹0.00</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Calculated CGST (half):</span>
+              <span class="summary-value" id="inv-cgst">₹0.00</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Total GST Tax:</span>
+              <span class="summary-value" id="inv-total-gst">₹0.00</span>
+            </div>
+            <div class="summary-row total-row">
+              <span class="summary-label">Grand Total:</span>
+              <span class="summary-value" id="inv-grand-total">₹0.00</span>
+            </div>
+          </div>
+          
+          <!-- Invoice Exporter Triggers -->
+          <div class="action-buttons-invoice">
+            <button type="button" id="btn-preview-invoice" class="btn btn-secondary">
+              <i class="fa-solid fa-eye"></i> Preview Draft
+            </button>
+            <button type="button" id="btn-download-pdf" class="btn btn-primary">
+              <i class="fa-solid fa-file-arrow-down"></i> Download Invoice PDF
+            </button>
+          </div>
+          
+        </form>
+      </section>
+      
+    </div>
+  </main>
+
+  <!-- INVOICE LIVE PREVIEW DIALOG -->
+  <div class="preview-modal-backdrop" id="preview-backdrop" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+    <div class="preview-modal">
+      <div class="preview-header">
+        <h3 class="preview-title" id="preview-title">Print Preview</h3>
+        <button class="preview-close" id="btn-close-preview" aria-label="Close Preview">&times;</button>
+      </div>
+      <div class="preview-body">
+        
+        <!-- Corporate printable layout wrapper (rendered as PDF) -->
+        <div id="invoice-pdf-template" class="invoice-pdf-container">
+          
+          <!-- Header Area -->
+          <div class="invoice-pdf-header">
+            <div>
+              <div class="pdf-logo-mark" id="pdf-header-logo-text">DIGITAL HEROES</div>
+              <p style="font-size: 13px; color: #64748b; margin-top: 5px;">GST-Compliant Commercial Invoice</p>
+            </div>
+            <div>
+              <div class="pdf-title">INVOICE</div>
+              <div class="pdf-invoice-meta">
+                Invoice #: <span id="pdf-meta-number">INV-2026-001</span><br>
+                Date: <span id="pdf-meta-date">2026-06-21</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Billing Addresses Grid -->
+          <div class="pdf-billing-grid">
+            <div class="pdf-bill-col">
+              <h4>Seller Details (From)</h4>
+              <p class="company-name" id="pdf-from-name">Digital Heroes Co.</p>
+              <p id="pdf-from-addr">123 Innovators Way, Tech Park, New Delhi</p>
+              <p style="margin-top: 8px;"><strong>GSTIN:</strong> <span id="pdf-from-gstin">07AAAAA1111A1Z1</span></p>
+            </div>
+            <div class="pdf-bill-col">
+              <h4>Client Details (To)</h4>
+              <p class="company-name" id="pdf-to-name">Acme Corporation</p>
+              <p id="pdf-to-addr">456 Corporate Avenue, Mumbai</p>
+            </div>
+          </div>
+          
+          <!-- Table Elements -->
+          <table class="pdf-table">
+            <thead>
+              <tr>
+                <th style="text-align: left; width: 45%;">Description</th>
+                <th class="align-right" style="width: 10%;">Qty</th>
+                <th class="align-right" style="width: 15%;">Rate (₹)</th>
+                <th class="align-right" style="width: 12%;">GST</th>
+                <th class="align-right" style="width: 18%;">Total (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="pdf-table-tbody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+          
+          <!-- Subtotal & Grand Total Box -->
+          <div class="pdf-summary-box">
+            <div class="pdf-summary-row">
+              <span class="pdf-summary-label">Subtotal (Pre-Tax):</span>
+              <span class="pdf-summary-val" id="pdf-calc-subtotal">₹0.00</span>
+            </div>
+            <div class="pdf-summary-row">
+              <span class="pdf-summary-label">SGST:</span>
+              <span class="pdf-summary-val" id="pdf-calc-sgst">₹0.00</span>
+            </div>
+            <div class="pdf-summary-row">
+              <span class="pdf-summary-label">CGST:</span>
+              <span class="pdf-summary-val" id="pdf-calc-cgst">₹0.00</span>
+            </div>
+            <div class="pdf-summary-row">
+              <span class="pdf-summary-label">Total GST Tax:</span>
+              <span class="pdf-summary-val" id="pdf-calc-tax">₹0.00</span>
+            </div>
+            <div class="pdf-summary-row pdf-total">
+              <span class="pdf-summary-label">Grand Total:</span>
+              <span class="pdf-summary-val" id="pdf-calc-total">₹0.00</span>
+            </div>
+          </div>
+          
+          <!-- Footer notice -->
+          <div class="pdf-footer">
+            <p>Thank you for your business!</p>
+            <p style="margin-top: 5px; font-size: 9px; color: #cbd5e1;">Generated by TaxHero. Built by Sourodeep Saha.</p>
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Area -->
+  <footer>
+    <a href="https://digitalheroesco.com" target="_blank" rel="noopener noreferrer" class="btn-hero">
+      Built for Digital Heroes
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+      </svg>
+    </a>
+    <div class="footer-credits">
+      Built by <strong>Sourodeep Saha</strong> — <strong>sourodeepsaha28@gmail.com</strong>
+    </div>
+  </footer>
+
+  <!-- Script Logic -->
+  <script src="script.js"></script>
+</body>
+</html>

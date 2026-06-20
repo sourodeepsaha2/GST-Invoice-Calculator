@@ -1,0 +1,974 @@
+/* Custom CSS for GST & Invoice Calculator - Fintech/SaaS Theme */
+
+/* Import Outfit Font */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Color Palette - HSL based for flexibility */
+  --primary-hue: 243;
+  --primary-saturation: 75%;
+  --primary-lightness: 59%;
+  --primary: hsl(var(--primary-hue), var(--primary-saturation), var(--primary-lightness));
+  --primary-hover: hsl(var(--primary-hue), var(--primary-saturation), calc(var(--primary-lightness) - 8%));
+  --primary-light: hsl(var(--primary-hue), var(--primary-saturation), 96%);
+
+  --secondary-hue: 174;
+  --secondary-saturation: 84%;
+  --secondary-lightness: 33%;
+  --secondary: hsl(var(--secondary-hue), var(--secondary-saturation), var(--secondary-lightness));
+  --secondary-hover: hsl(var(--secondary-hue), var(--secondary-saturation), calc(var(--secondary-lightness) - 6%));
+  --secondary-light: hsl(var(--secondary-hue), var(--secondary-saturation), 95%);
+
+  --success: #10b981;
+  --danger: #f43f5e;
+  --danger-hover: #e11d48;
+  --danger-light: #fff1f2;
+  
+  /* Slate/Neutral colors */
+  --bg-app: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-light: #94a3b8;
+  --border: #e2e8f0;
+  --border-focus: hsl(var(--primary-hue), var(--primary-saturation), 75%);
+  
+  /* Borders and Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Mode Theme overrides (if toggled/preferred) */
+[data-theme="dark"] {
+  --bg-app: #0b0f19;
+  --bg-card: #151c2c;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-light: #64748b;
+  --border: #1e293b;
+  --primary-light: rgba(79, 70, 229, 0.15);
+  --secondary-light: rgba(13, 148, 136, 0.15);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Base resets & styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Header & Banner Styles */
+header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+.logo-text {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.theme-toggle-btn {
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-2px);
+  background: var(--primary);
+  color: white;
+}
+
+/* Main Dashboard layout */
+main {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  flex-grow: 1;
+}
+
+.dashboard-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.dashboard-subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.9fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Cards setup */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  padding: 2.25rem;
+  transition: var(--transition);
+  position: relative;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+.card-title-area {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.25rem;
+}
+
+.card-title-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.025em;
+}
+
+/* GST Calculator layout styles */
+.calculator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Form components styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-addon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.input-addon-right {
+  position: absolute;
+  right: 1rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.25rem; /* left offset for Currency addon */
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+  background-color: var(--bg-card);
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: var(--transition);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25rem;
+}
+
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-light);
+  background-color: var(--bg-card);
+}
+
+.form-input.no-addon {
+  padding-left: 1rem;
+}
+
+.custom-rate-input-container {
+  margin-top: 0.75rem;
+  display: none; /* shown only when custom option is selected */
+  animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Segmented Control (Toggle Exclusive/Inclusive) */
+.toggle-selector {
+  display: flex;
+  background: var(--bg-app);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.toggle-option {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: calc(var(--radius-sm) - 2px);
+  transition: var(--transition);
+  z-index: 1;
+}
+
+.toggle-option.active {
+  color: white;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+/* GST Output Screen styling */
+.results-container {
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid var(--border);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed var(--border);
+}
+
+.result-row:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.result-row.grand-total {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-main);
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+}
+
+.result-val {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.result-row.grand-total .result-val {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.4rem;
+}
+
+/* Submission action triggers */
+.btn-action-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.9rem 1.5rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  flex-grow: 1;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-app);
+  color: var(--text-main);
+}
+
+/* Invoice Generator layout styles */
+.invoice-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.invoice-full-width {
+  grid-column: span 2;
+}
+
+/* Table styles */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.line-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.line-items-table th {
+  background-color: var(--bg-app);
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.line-items-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.line-items-table tr:last-child td {
+  border-bottom: none;
+}
+
+.line-items-table td input {
+  padding: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.btn-delete-row {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--danger-light);
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.btn-delete-row:hover {
+  background: var(--danger);
+  color: white;
+  transform: scale(1.05);
+}
+
+.add-item-btn-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.btn-outline {
+  border: 2px dashed var(--primary);
+  background: transparent;
+  color: var(--primary);
+  padding: 0.65rem 1.25rem;
+}
+
+.btn-outline:hover {
+  background: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+/* Invoice Calculations */
+.invoice-summary-box {
+  border-top: 2px solid var(--border);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 320px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.summary-label {
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 2rem;
+  font-weight: 500;
+}
+
+.summary-value {
+  font-weight: 700;
+  color: var(--text-main);
+  width: 120px;
+  text-align: right;
+}
+
+.summary-row.total-row {
+  font-size: 1.25rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.summary-row.total-row .summary-label {
+  color: var(--text-main);
+  font-weight: 800;
+}
+
+.summary-row.total-row .summary-value {
+  color: var(--secondary);
+  font-weight: 800;
+}
+
+.action-buttons-invoice {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Floating live preview container */
+.preview-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.preview-modal-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.preview-modal {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 850px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xl);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.preview-modal-backdrop.show .preview-modal {
+  transform: translateY(0);
+}
+
+.preview-header {
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.preview-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.preview-close:hover {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+}
+
+.preview-body {
+  padding: 2rem;
+  overflow-y: auto;
+  flex-grow: 1;
+  background-color: #f1f5f9;
+}
+
+/* Corporate Printable Invoice Styling for PDF Generation */
+.invoice-pdf-container {
+  background: white;
+  color: #1e293b;
+  width: 100%;
+  max-width: 790px;
+  margin: 0 auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border-radius: 4px;
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.invoice-pdf-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 20px;
+}
+
+.pdf-logo-mark {
+  font-size: 24px;
+  font-weight: 800;
+  color: #4f46e5;
+}
+
+.pdf-title {
+  font-size: 28px;
+  font-weight: 800;
+  text-align: right;
+  color: #0f172a;
+}
+
+.pdf-invoice-meta {
+  text-align: right;
+  font-size: 13px;
+  color: #475569;
+  margin-top: 10px;
+}
+
+.pdf-invoice-meta span {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.pdf-billing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.pdf-bill-col h4 {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.pdf-bill-col p {
+  font-size: 14px;
+  color: #334155;
+  white-space: pre-line;
+  margin-bottom: 4px;
+}
+
+.pdf-bill-col p.company-name {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.pdf-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 12px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.pdf-table td {
+  padding: 12px;
+  font-size: 13px;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.pdf-table td.align-right, .pdf-table th.align-right {
+  text-align: right;
+}
+
+.pdf-summary-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pdf-summary-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 280px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.pdf-summary-label {
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 20px;
+}
+
+.pdf-summary-val {
+  font-weight: 700;
+  color: #0f172a;
+  width: 100px;
+  text-align: right;
+}
+
+.pdf-summary-row.pdf-total {
+  font-size: 16px;
+  border-top: 2px solid #e2e8f0;
+  padding-top: 10px;
+  margin-top: 5px;
+}
+
+.pdf-summary-row.pdf-total .pdf-summary-label {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.pdf-summary-row.pdf-total .pdf-summary-val {
+  color: #0d9488;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.pdf-footer {
+  margin-top: 50px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Page footer styles */
+footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 1.5rem;
+  margin-top: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-credits {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.footer-credits strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* Styled clear button for footer */
+.btn-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  background-color: transparent;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-hero:hover {
+  background-color: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+.btn-hero svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+/* Mobile Responsiveness queries */
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  main {
+    padding: 2rem 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  header {
+    padding: 1rem;
+  }
+  
+  .dashboard-title {
+    font-size: 1.75rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .invoice-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .invoice-full-width {
+    grid-column: span 1;
+  }
+  
+  .add-item-btn-container {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .add-item-btn-container .btn {
+    width: 100%;
+  }
+  
+  .invoice-summary-box {
+    align-items: stretch;
+  }
+  
+  .summary-row {
+    width: 100%;
+  }
+  
+  .summary-label {
+    padding-right: 1rem;
+  }
+  
+  .action-buttons-invoice {
+    flex-direction: column;
+  }
+  
+  .action-buttons-invoice .btn {
+    width: 100%;
+  }
+  
+  .theme-toggle-btn {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .preview-modal {
+    width: 95%;
+  }
+}
